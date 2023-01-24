@@ -3,12 +3,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CoffeeModule } from './coffee/coffee.module';
-import config from 'ormconfig';
+import CONNECTION from './db.connection';
 
 @Module({
   imports: [
     CoffeeModule, 
-    TypeOrmModule.forRoot(config)
+    // @ts-ignore
+    TypeOrmModule.forRoot({
+      ...CONNECTION,
+      synchronize: false,
+      autoLoadEntities: true
+    })
   ],
   controllers: [AppController],
   providers: [AppService],
