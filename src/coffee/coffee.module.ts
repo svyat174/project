@@ -13,6 +13,7 @@ import { Flavor } from './entities/flavor.entity';
       useClass: CoffeeService
     }
   ],
-  controllers: [CoffeeController]
+  controllers: [CoffeeController],
+  exports: [CoffeeService]
 })
 export class CoffeeModule {}
