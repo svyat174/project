@@ -5,11 +5,10 @@ const config: DataSourceOptions = {
 	host: 'localhost',
 	port: 5432,
 	username: 'postgres',
-	password: 'Dfcz2019',
+	password: 'postgres',
 	database: 'postgres',
 	entities: ['dist/**/*.entity.js'],
 	migrations: ['dist/migrations/*.js'],
-	
 }
 
 export default config
