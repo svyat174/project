@@ -9,13 +9,16 @@ export class User {
     @Column()
     email: string
 
+    @Column()
+    username: string
+
     @Column({ default: '' })
     bio: string
 
     @Column({ default: '' })
     image: string
 
-    @Column()
+    @Column({ select: false })
     password: string
 
     @BeforeInsert()
