@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoffeeModule } from './coffee/coffee.module';
 import CONNECTION from './db.connection';
 import { UserModel } from './user/user.module';
-import { AuthMiddleware } from './user/middlewares/auth.maddleware';
+import { AuthMiddleware } from './user/middlewares/auth.middleware';
 
 @Module({
   imports: [
