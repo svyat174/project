@@ -7,8 +7,8 @@ const config: DataSourceOptions = {
 	username: 'postgres',
 	password: 'postgres',
 	database: 'postgres',
-	entities: ['dist/**/*.entity.js'],
-	migrations: ['dist/migrations/*.js'],
+	entities: ['dist/src/**/**/*.entity.js'],
+	migrations: ['dist/src/migrations/*.js'],
 }
 
 export default config

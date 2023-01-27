@@ -1,22 +1,23 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { InjectRepository } from "@nestjs/typeorm";
-import { User } from "./entity/user.entity";
+import { UserEntity } from "./entities/user.entity";
 import { Repository } from "typeorm";
 import { sign } from "jsonwebtoken";
 import { JWT_SECRET } from "src/config";
 import { IUserResponse } from "src/user/types/userResponse.types";
 import { LoginUserDto } from "./dto/login-user.dto";
 import { compare } from "bcrypt";
+import { UpdateUserDto } from "./dto/updateUser.dto";
 
 @Injectable()
 export class UserService {
     constructor(
-        @InjectRepository(User) 
-        private readonly userRepository: Repository<User>
+        @InjectRepository(UserEntity) 
+        private readonly userRepository: Repository<UserEntity>
     ) {}
 
-    public async createUser(createUserDto: CreateUserDto): Promise<User>{
+    public async createUser(createUserDto: CreateUserDto): Promise<UserEntity>{
         const userByEmail = await this.userRepository.findOne({
             where: {email: createUserDto.email}
         })
@@ -32,7 +33,7 @@ export class UserService {
             )
         }
 
-        const newUser = new User()
+        const newUser = new UserEntity()
         Object.assign(newUser, createUserDto)
         return await this.userRepository.save(newUser)
     }
@@ -43,7 +44,7 @@ export class UserService {
         })
     }
 
-    private generateJWT(user: User): string {
+    private generateJWT(user: UserEntity): string {
         return sign({
             id: user.id,
             username: user.username,
@@ -51,7 +52,7 @@ export class UserService {
         }, JWT_SECRET)
     }
 
-    public buildUserResponse(user: User): IUserResponse {
+    public buildUserResponse(user: UserEntity): IUserResponse {
         return {
             user: {
                 ...user,
@@ -85,5 +86,11 @@ export class UserService {
         delete user.password
 
         return user
+    }
+
+    public async updateUser(userId: number, updateUserDto: UpdateUserDto) {
+        const user = await this.findById(userId)
+        Object.assign(user, updateUserDto)
+        return await this.userRepository.save(user)
     }
 }

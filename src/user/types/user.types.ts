@@ -1,3 +1,3 @@
-import { User } from "src/user/entity/user.entity";
+import { UserEntity } from "src/user/entities/user.entity";
 
-export type UserType = Omit<User, 'hashPassword'>
+export type UserType = Omit<UserEntity, 'hashPassword'>

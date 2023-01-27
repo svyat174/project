@@ -4,6 +4,7 @@ import { CoffeeModule } from './coffee/coffee.module';
 import CONNECTION from './db.connection';
 import { UserModel } from './user/user.module';
 import { AuthMiddleware } from './user/middlewares/auth.middleware';
+import { ArticleModule } from './article/article.module';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { AuthMiddleware } from './user/middlewares/auth.middleware';
       autoLoadEntities: true
     }), 
     CoffeeModule,
-    UserModel
+    UserModel,
+    ArticleModule
   ],
   controllers: [],
   providers: [],
