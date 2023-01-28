@@ -1,16 +1,26 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ArticleService } from "./article.service";
 import { AuthGuard } from "src/user/guards/auth.guard";
 import { UserDecorator } from "src/user/decorators/user.decorator";
 import { UserEntity } from "src/user/entities/user.entity";
 import { CreateArticleDto } from "./dto/createArticle.dto";
 import { IArticleResponse } from "./types/articleResponse.interface";
+import { PaginationQueryDto } from "src/common/dto/pagination-query.dto/pagination-query.dto";
 
 @Controller('articles')
 export class ArticleController {
     constructor(private readonly articleServise: ArticleService) {}
 
+    @Get()
+    public async getAll(
+        @Query() paginationQuery: PaginationQueryDto,
+        @UserDecorator('id') currentUserId: number
+    ) {
+        return this.articleServise.getAll(currentUserId, paginationQuery)
+    }
+
     @Post()
+    @UsePipes(new ValidationPipe())
     @UseGuards(AuthGuard)
     public async create(
         @UserDecorator() currentUser: UserEntity,
@@ -36,5 +46,22 @@ export class ArticleController {
         @Param('slug') slug: string,
     ) {
         return this.articleServise.deleteArticleBySlag(currentUserId, slug)
+    }
+
+    @Put(':slug')
+    @UseGuards(AuthGuard)
+    @UsePipes(new ValidationPipe())
+    public async updateArticle(
+        @UserDecorator('id') currentUserId: number,
+        @Param('slug') slug: string,
+        @Body('article') updateArticleDto: CreateArticleDto
+    ) {
+        const article = await this.articleServise.updateArticle(
+            currentUserId,
+            slug,
+            updateArticleDto
+        )
+
+        return this.articleServise.buildArticleResponse(article)
     }
 }
